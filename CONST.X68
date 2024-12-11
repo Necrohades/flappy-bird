@@ -21,6 +21,10 @@ SEWXSPD     EQU     5                       ; SEWER X SPEED
 SEWYSPD     EQU     3                       ; SEWER Y SPEED 
 SEWSCORE    EQU     5                       ; SCORE FOR SEWER
 
+; --- GAME OVER STATE RELATED CONSTANTS ---------------------------------------
+GOVSTRX     EQU     35                      ; TITLE X COORDINATE
+GOVSTRY     EQU     15                      ; TITLE Y COORDINATE
+GOVSTRC     EQU     $00FFFFFF               ; TITLE COLOR
 
 
 
