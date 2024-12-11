@@ -4,6 +4,8 @@
 * Date       :
 * Description:
 *-----------------------------------------------------------
+            ; INCLUDE "CONST.X68"
+
 SYSINIT
             MOVE.L  (A7)+, A0               ; GET RETURN ADDRESS
             JSR     KBDINIT
@@ -14,7 +16,8 @@ SYSINIT
 
 SCRINIT
             ORI.W   #$0700, SR              DISABLE INTERRUPTIONS
-            MOVE.L  #SCRUPD, ($80+SCRTRAP*4)
+            MOVE.L  #SCRTRAP, D0
+            MOVE.L  #SCRUPD, ($80+4*SCRTRAP)
             
             ; SET RESOLUTION
             MOVE.L  #SCRWIDTH<<16|SCRHEIGH, D1
@@ -24,6 +27,8 @@ SCRINIT
             ; SET WINDOWED MODE
             MOVE.L  #1, D1
             TRAP    #15
+            
+            RTS
             
             ; CLEAR VISIBLE BUFFER
             MOVE.W  #$FF00, D1
@@ -40,27 +45,25 @@ SCRINIT
             MOVE.B  #92, D0
             TRAP    #15
             
-            MOVE.L  #SCRISR, ($60+SCRIRQ*4) SET EXCEPTION VECTOR
-            MOVE.B  #5, D1                  ENABLE EXCEPTION PROCESSING
-            MOVE.B  #32, D0
-            TRAP    #15
-            
-            ; ENABLE AUTO-IRQ
-            MOVE.B  #%10000000|SCRIRQ, D2
-            MOVE.B  #SCRTIM, D3
-            MOVE.B  #6, D1
-            MOVE.B  #32, D0
-            TRAP    #15
-            
-            CLR.B   (SCRINTCT)
-            CLR.B   (SCRCYCCT)
-            ANDI.W  #$F8FF, SR
             RTS
+            
+
 SCRISR
+            RTS
 SCRUPD
+            RTS
 KBDINIT
+            RTS
 KBREAD
+            RTS
 DMMINIT
+            RTS
+
+
+
+
+
+
 
 *~Font name~Courier New~
 *~Font size~10~
