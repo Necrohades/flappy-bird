@@ -8,11 +8,12 @@
 
 SYSINIT
             MOVE.L  (A7)+, A0               ; GET RETURN ADDRESS
-            JSR     KBDINIT
-            JSR     SCRINIT
-            JSR     DMMINIT
-            ANDI.W  #$DFFF, SR
-            MOVE.L  A0, -(A7)
+            JSR     KBDINIT                 ; INIT KEYBOARD
+            JSR     SCRINIT                 ; INIT SCREEN
+            JSR     DMMINIT                 ; INIT DYNAMIC MEMORY
+            ANDI.W  #$DFFF, SR              ; SWITCH TO USER
+            MOVE.L  A0, -(A7)               ; PUT RETURN ADDRESS
+            RTS
 
 SCRINIT
             ORI.W   #$0700, SR              DISABLE INTERRUPTIONS
@@ -27,8 +28,6 @@ SCRINIT
             ; SET WINDOWED MODE
             MOVE.L  #1, D1
             TRAP    #15
-            
-            RTS
             
             ; CLEAR VISIBLE BUFFER
             MOVE.W  #$FF00, D1
@@ -45,6 +44,22 @@ SCRINIT
             MOVE.B  #92, D0
             TRAP    #15
             
+            ; SET EXCETPION VECTOR & ENABLE EXCEPTION PROCESSING
+            MOVE.L  #SCRISR, ($60+SCRIRQ*4)
+            MOVE.B  #5, D1
+            MOVE.B  #32, d0
+            TRAP    #15
+            
+            ; ENABLE AUTO-IRQ
+            MOVE.B  #%10000000|SCRIRQ,D2
+            MOVE.B  #SCRTIM,D3
+            MOVE.B  #6,D1
+            MOVE.B  #32,D0
+            TRAP    #15
+            
+            CLR.B   (SCRINTCT)              ; PREPARE INTERRUPT FLAG
+            CLR.B   (SCRCYCCT)              ; PREPARE CYCLE COUNTER
+            ANDI.W  #$F8FF,SR               ; ENABLE INTS
             RTS
             
 
