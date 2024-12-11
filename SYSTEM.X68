@@ -66,8 +66,21 @@ SCRINIT
 SCRISR
             RTS
 SCRUPD
+            MOVEM.L D0-D1,-(A7)
+            MOVEQ   #94,D0
+            TRAP    #15
+            MOVEQ   #11,D0
+            MOVE.W  #$FF00,D1
+            TRAP    #15
+            MOVEM.L (A7)+,D0-D1
+            RTE
             RTS
 KBDINIT
+            CLR.B   (KBDVAL)                 ; INIT VARS
+            CLR.B   (KBDEDGE)
+            MOVE.L  #KBDREAD,($80+KBDTRAP*4) ; INSTALL
+            RTS
+
             RTS
 KBREAD
             RTS
