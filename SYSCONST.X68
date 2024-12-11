@@ -13,6 +13,14 @@ SCRWIDTH    EQU     640
 SCRHEIGH    EQU     480
 
 
+;---KEYCODES---------------------------------------------------
+KBDLEFT     EQU     $25
+KBDUP       EQU     $26
+KBDRIGHT    EQU     $27
+KBDDOWN     EQU     $28
+
+KBDPAUSE    EQU     'P'
+
 
 
 
